@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $host = 'localhost';
 $db = 'web_service';
 $user = 'root';
@@ -39,7 +41,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$loginEmail]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user && password_verify($loginPassword, $user['password'])) {
+        if ($user && password_verify($loginPassword, $user['password'])) {  
+            $_SESSION['user'] = $user;
+    // Check if "Remember Me" checkbox is checked
+       // echo json_encode($_POST['remember']);exit;
+    if (isset($_POST['remember']) && $_POST['remember'] === "true") {
+        // Generate a random session token
+        $sessionToken = bin2hex(random_bytes(32));
+
+        // Save the session token in a cookie
+        setcookie('session_token', $sessionToken, time() + (30 * 24 * 60 * 60)); // Cookie expires in 30 days
+
+        // Update the user's session token in the database
+        $stmt = $pdo->prepare("UPDATE users SET session_token = ? WHERE email = ?");
+        $stmt->execute([$sessionToken, $loginEmail]);
+    }
             $message = "Welcome back, " . $user['name'] . "! You are now logged in.";
         } else {
             $message = "Invalid email or password.";
@@ -58,10 +74,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <h1>Web Service Example</h1>
+<?php if (isset($_SESSION['user'])) {
+  $user = $_SESSION['user'];?>
+   Welcome,   <?php echo$user['name']; ?> ! You are logged in.<br>
+ <div id='logout-form'>
+ <button id='logoutButton' onClick="logoutButton(this)">Logout</button>
+ </div>
+ <?php  
+}elseif (isset($_COOKIE['session_token'])) {    // Check if the session token exists in the database
+    $sessionToken = $_COOKIE['session_token'];
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE session_token = ?");
+    $stmt->execute([$sessionToken]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+ if ($user) {
+        $_SESSION['user'] = $user;
 
+    ?>   Welcome,   <?php echo$user['name']; ?> ! You are logged in.
+ <div id='logout-form'>
+ <button id='logoutButton' onClick="logoutButton(this)">Logout</button>
+ </div><?php }
+}   else   { ?>
     <div id="signup-form">
         <h2>Sign Up</h2>
-        <form id="signupForm">
+        <form id="signupForm" onsubmit="submitFunct(event)">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" placeholder="Enter your name" required>
 
@@ -77,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div id="login-form">
         <h2>Login</h2>
-        <form id="loginForm">
+        <form id="loginForm"  onsubmit="loginForm(event)">
             <label for="loginEmail">Email:</label>
             <input type="email" id="loginEmail" name="loginEmail" placeholder="Enter your email" required>
 
@@ -85,9 +120,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter your password" required>
 
             <button type="submit">Login</button>
+            <label for="remember">Remember Me:</label>
+<input type="checkbox" id="remember" name="remember">
+
         </form>
     </div>
 
+<?php } ?>
     <div id="result"></div>
 
     <script src="script.js"></script>
