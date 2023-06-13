@@ -18,7 +18,7 @@ function submitFunct (event) {
     xhr.send('signup=1&name=' + name + '&email=' + email + '&password=' + password);
 };
 
-function loginForm  (event) {
+function loginForm(event) {
     event.preventDefault();
 
     var loginEmail = document.getElementById('loginEmail').value;
@@ -29,14 +29,25 @@ function loginForm  (event) {
     xhr.open('POST', 'index.php', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {console.log(xhr.responseText);
-            var response = JSON.parse(xhr.responseText);
-            document.getElementById('result').textContent = response;                location.reload(); // Reload the page
-
+        if (xhr.readyState === XMLHttpRequest.DONE) {console.log(JSON.parse(xhr.responseText).success);
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success===true) {
+                    // If login is successful, perform necessary actions
+                    location.reload(); // Reload the page
+                } else {
+                    // Display error message
+                    document.getElementById('result').textContent = response.message;
+                }
+            } else {
+                // Display error message if request fails
+                document.getElementById('result').textContent =   JSON.parse(xhr.responseText);
+            }
         }
     };
     xhr.send('login=1&loginEmail=' + loginEmail + '&loginPassword=' + loginPassword + '&remember=' + remember);
-};
+}
+
 // Logout button click event
 function logoutButton (event) {
     //event.preventDefault();

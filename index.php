@@ -56,12 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("UPDATE users SET session_token = ? WHERE email = ?");
         $stmt->execute([$sessionToken, $loginEmail]);
     }
-            $message = "Welcome back, " . $user['name'] . "! You are now logged in.";
+    $response = array('success' => true, 'message' => "Welcome back, " . $user['name'] . "! You are now logged in.");
         } else {
-            $message = "Invalid email or password.";
+    $response = array('success' => false, 'message' => "Invalid email or password.");
         }
 
-        echo json_encode($message);
+        echo json_encode($response);
         exit;
     }
 }
@@ -112,18 +112,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div id="login-form">
         <h2>Login</h2>
-        <form id="loginForm"  onsubmit="loginForm(event)">
-            <label for="loginEmail">Email:</label>
-            <input type="email" id="loginEmail" name="loginEmail" placeholder="Enter your email" required>
+<form id="loginForm" onsubmit="loginForm(event)">
+    <label for="loginEmail">Email:</label>
+    <input type="email" id="loginEmail" name="loginEmail" placeholder="Enter your email" required>
 
-            <label for="loginPassword">Password:</label>
-            <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter your password" required>
+    <label for="loginPassword">Password:</label>
+    <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter your password" required>
 
-            <button type="submit">Login</button>
-            <label for="remember">Remember Me:</label>
-<input type="checkbox" id="remember" name="remember">
+    <button type="submit">Login</button>
+    <label for="remember">Remember Me:</label>
+    <input type="checkbox" id="remember" name="remember">
+    <div id="result"></div> <!-- Error message will be displayed here -->
+</form>
 
-        </form>
     </div>
 
 <?php } ?>
