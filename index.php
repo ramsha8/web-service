@@ -70,10 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
     <title>Web Service Example</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 <body>
-    <h1>Web Service Example</h1>
+   
+     
 <?php if (isset($_SESSION['user'])) {
   $user = $_SESSION['user'];?>
    Welcome,   <?php echo$user['name']; ?> ! You are logged in.<br>
@@ -94,42 +95,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  <button id='logoutButton' onClick="logoutButton(this)">Logout</button>
  </div><?php }
 }   else   { ?>
-    <div id="signup-form">
-        <h2>Sign Up</h2>
-        <form id="signupForm" onsubmit="submitFunct(event)">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+    <nav class=" "> <h1 class="center calc-ml">Web Service Example</h1>
+<a href="<?php echo'http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF']); ?>/inc/login.php" class="button right-buttons">Log in</a>
+<a href="<?php echo'http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF']); ?>/inc/signup.php" class="button right-buttons">Sign up</a>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
-
-            <button type="submit">Sign Up</button>
-        </form>
-    </div>
-
-    <div id="login-form">
-        <h2>Login</h2>
-<form id="loginForm" onsubmit="loginForm(event)">
-    <label for="loginEmail">Email:</label>
-    <input type="email" id="loginEmail" name="loginEmail" placeholder="Enter your email" required>
-
-    <label for="loginPassword">Password:</label>
-    <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter your password" required>
-
-    <button type="submit">Login</button>
-    <label for="remember">Remember Me:</label>
-    <input type="checkbox" id="remember" name="remember">
-    <div id="result"></div> <!-- Error message will be displayed here -->
-</form>
-
-    </div>
-
+</nav>
 <?php } ?>
     <div id="result"></div>
-
-    <script src="script.js"></script>
+  <div class="container">
+    <h1>Product Catalog</h1>
+    <div id="product-list">
+      <?php include 'product_list.php'; ?>
+    </div>
+  </div>
+    <script src="<?php echo'http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF']); ?>/script.js"></script>
 </body>
 </html>

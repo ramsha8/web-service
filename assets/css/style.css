@@ -1,0 +1,104 @@
+h1 {
+    color: #333;
+}
+.success {
+    color: green;
+}
+.d-flex{display:flex;}
+.error {
+    color: red;
+}
+
+form {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.jc-fe{justify-content: flex-end;}
+
+button {
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#result {
+    margin-top: 20px;
+    font-weight: bold;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.product {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.product img {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+}
+
+.product h2 {
+  margin-top: 0;
+}
+
+.product p {
+  margin-bottom: 5px;
+}
+
+/* CSS for login and sign-up buttons */
+a.button {
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  background-color: #4caf50;
+  color: #fff;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+a.button:hover {
+  background-color: #45a049;
+}
+
+a.button + a.button {
+  margin-left: 10px;
+}
+/* Navigation bar styles */
+/* Navigation bar styles */
+nav {
+  background-color: #f2f2f2;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+/* Heading styles */
+.center {
+  margin: 0 auto; /* Added auto margin to center the heading */
+}
+
+/* Button styles */
+
+body{margin-top:0;}
+/* Align buttons to the right */
+nav .right-buttons {
+  order: 2;
+}
+.calc-ml{margin-left: calc(50% -   120px);}

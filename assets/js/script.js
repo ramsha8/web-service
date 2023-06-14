@@ -45,7 +45,12 @@ function loginForm(event) {
             }
         }
     };
-    xhr.send('login=1&loginEmail=' + loginEmail + '&loginPassword=' + loginPassword + '&remember=' + remember);
+      var formData = new FormData();
+  formData.append('login', '1');
+  formData.append('loginEmail', loginEmail);
+  formData.append('loginPassword', loginPassword);
+  formData.append('remember', remember);
+  xhr.send(formData);
 }
 
 // Logout button click event
@@ -67,3 +72,16 @@ function logoutButton (event) {
     };
     xhr.send();
 };
+// You can add any JavaScript code for interactivity or additional functionality
+// For example, adding a click event to the products
+
+window.addEventListener('load', function () {
+    var products = document.getElementsByClassName('product');
+    
+    for (var i = 0; i < products.length; i++) {
+        products[i].addEventListener('click', function () {
+            // Perform some action when a product is clicked
+            console.log('Product clicked');
+        });
+    }
+});
