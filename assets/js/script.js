@@ -19,39 +19,51 @@ function submitFunct (event) {
 };
 
 function loginForm(event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    var loginEmail = document.getElementById('loginEmail').value;
-    var loginPassword = document.getElementById('loginPassword').value;
-    var remember = document.getElementById('remember').checked;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'index.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {console.log(JSON.parse(xhr.responseText).success);
-            if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                if (response.success===true) {
-                    // If login is successful, perform necessary actions
-                    location.reload(); // Reload the page
-                } else {
-                    // Display error message
-                    document.getElementById('result').textContent = response.message;
-                }
-            } else {
-                // Display error message if request fails
-                document.getElementById('result').textContent =   JSON.parse(xhr.responseText);
-            }
-        }
-    };
-      var formData = new FormData();
-  formData.append('login', '1');
-  formData.append('loginEmail', loginEmail);
-  formData.append('loginPassword', loginPassword);
-  formData.append('remember', remember);
-  xhr.send(formData);
+  var loginEmail = document.getElementById('loginEmail').value;
+  var loginPassword = document.getElementById('loginPassword').value;
+  var remember = document.getElementById('remember').checked;
+
+  var url = "http://localhost/ramsha's%20web%20service/index.php";
+  var data = new FormData();
+  data.append('login', '1');
+  data.append('loginEmail', loginEmail);
+  data.append('loginPassword', loginPassword);
+  data.append('remember', remember);
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams(data)
+  })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(response) {
+      
+      if (response.success === true) {
+       const token=response.message;
+        // 
+
+        // 
+        // If login is successful, perform necessary actions
+        //location.reload(); // Reload the page
+      } else {
+        // Display error message
+        document.getElementById('result').textContent = response.message;
+      }
+    })
+    .catch(function(error) {
+      // Display error message if request fails
+      document.getElementById('result').textContent = error.message;
+    });
 }
+
+
 
 // Logout button click event
 function logoutButton (event) {
@@ -85,3 +97,41 @@ window.addEventListener('load', function () {
         });
     }
 });
+function addToCart(product) {
+    var cartItems = document.getElementById('cart-items');
+    var totalElement = document.getElementById('total-price');
+
+    var cartItem = document.createElement('div');
+    cartItem.innerHTML = product.name + ' - $' + product.price;
+
+    var removeButton = document.createElement('button');
+    removeButton.textContent = 'Remove';
+    removeButton.addEventListener('click', function() {
+        removeFromCart(product);
+    });
+
+    cartItem.appendChild(removeButton);
+    cartItems.appendChild(cartItem);
+
+    var total = parseFloat(totalElement.textContent);
+    total += product.price;
+    totalElement.textContent = total.toFixed(2);
+}
+function removeFromCart(product) {
+    var cartItems = document.getElementById('cart-items');
+    var totalElement = document.getElementById('total-price');
+
+    var cartItem = product.name + ' - $' + product.price;
+    var items = cartItems.getElementsByClassName('product-item');
+
+    for (var i = 0; i < items.length; i++) {
+        if (items[i].textContent === cartItem) {
+            items[i].remove();
+            break;
+        }
+    }
+
+    var total = parseFloat(totalElement.textContent);
+    total -= product.price;
+    totalElement.textContent = total.toFixed(2);
+}

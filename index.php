@@ -8,7 +8,7 @@ $pass = '';
 
 $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+//
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['signup'])) {
         $name = $_POST['name'];
@@ -43,6 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($user && password_verify($loginPassword, $user['password'])) {  
             $_SESSION['user'] = $user;
+
+$prefix = 'webservice_';
+$token = uniqid($prefix);
+
     // Check if "Remember Me" checkbox is checked
        // echo json_encode($_POST['remember']);exit;
     if (isset($_POST['remember']) && $_POST['remember'] === "true") {
@@ -56,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("UPDATE users SET session_token = ? WHERE email = ?");
         $stmt->execute([$sessionToken, $loginEmail]);
     }
-    $response = array('success' => true, 'message' => "Welcome back, " . $user['name'] . "! You are now logged in.");
+    $response = array('success' => true, 'message' => $token);
         } else {
     $response = array('success' => false, 'message' => "Invalid email or password.");
         }
@@ -71,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <title>Web Service Example</title>
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
 </head>
 <body>
    
@@ -108,6 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <?php include 'product_list.php'; ?>
     </div>
   </div>
-    <script src="<?php echo'http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF']); ?>/script.js"></script>
+    <script src="assets/js/script.js"></script>
+      <!-- code block that i got from firebase -->
+
 </body>
 </html>

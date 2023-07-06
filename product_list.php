@@ -1,5 +1,15 @@
+    <div id="cart-container">
+        <h2>Cart</h2>
+        <div id="cart-items">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div id="cart-total">
+            Total: <span id="total-price">0</span>
+        </div>
+    </div>
 <?php
 // Assuming you have a database connection
+
 $dbHost = 'localhost';
 $dbUsername = 'root';
 $dbPassword = '';
@@ -19,6 +29,7 @@ if (mysqli_num_rows($result) > 0) {
         echo '<h2>' . $row['name'] . '</h2>';
         echo '<p>' . $row['description'] . '</p>';
         echo '<p>Price: $' . $row['price'] . '</p>';
+        echo'<button onclick="addToCart('.$row['id'].')">Add to Cart</button>';
         echo '</div>';
     }
 } else {
